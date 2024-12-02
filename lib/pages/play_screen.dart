@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'dart:math';
+import '../main.dart';
 
 class GameScreen extends StatefulWidget {
   final String difficulty;
@@ -106,6 +107,17 @@ class _GameScreenState extends State<GameScreen> {
               });
             },
             child: const Text('Play Again'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const MyHomePage()),
+                    (route) => false,
+              );
+            },
+            child: const Text('Go Back'),
           ),
         ],
       ),
