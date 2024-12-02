@@ -24,7 +24,6 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     targetWord = generateWord(widget.wordLength).toLowerCase();
-    print("Target Word: $targetWord"); // Debugging
   }
 
   String generateWord(int length) {
@@ -32,11 +31,6 @@ class _GameScreenState extends State<GameScreen> {
 
     // Filter words by the desired length
     final filteredWords = all.where((word) => word.length == length).toList();
-
-    // If no words match the length, return a default message
-    if (filteredWords.isEmpty) {
-      return 'No word found of length $length';
-    }
 
     // Return a random word from the filtered list
     return filteredWords[random.nextInt(filteredWords.length)];
@@ -63,19 +57,17 @@ class _GameScreenState extends State<GameScreen> {
   void handleEnter() {
     final currentGuess = guesses[currentRow].join().toLowerCase();
     if (currentCol == widget.wordLength) {
-      // Evaluate the current guess and provide feedback
       setState(() {
         gridColors[currentRow] = List.generate(widget.wordLength, (index) {
           if (targetWord[index] == currentGuess[index]) {
-            return Colors.green; // Correct position
+            return Colors.green;
           } else if (targetWord.contains(currentGuess[index])) {
-            return Colors.yellow; // Wrong position
+            return Colors.yellow;
           } else {
-            return Colors.grey; // Incorrect letter
+            return Colors.grey;
           }
         });
 
-        // Move to the next row or end the game if the guess is correct
         if (currentGuess == targetWord) {
           _showEndGameDialog("Congratulations!", "You guessed the word: $targetWord");
         } else if (currentRow == 5) {
@@ -110,7 +102,7 @@ class _GameScreenState extends State<GameScreen> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
+              Navigator.of(context).pop();
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const MyHomePage()),
@@ -131,13 +123,12 @@ class _GameScreenState extends State<GameScreen> {
       'ZXCVBNM'
     ];
 
-    double screenWidth = MediaQuery.of(context).size.width; // Get screen width
+    double screenWidth = MediaQuery.of(context).size.width;
     double buttonWidth = screenWidth / 10;
     buttonWidth = buttonWidth > 50 ? 50 : buttonWidth;
 
     return Column(
       children: [
-        // Map the rows of letters to Rows of buttons
         ...rows.map((row) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +138,7 @@ class _GameScreenState extends State<GameScreen> {
                 child: ElevatedButton(
                   onPressed: () => handleLetterInput(char),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(buttonWidth, buttonWidth), // Set size to responsive width
+                    minimumSize: Size(buttonWidth, buttonWidth),
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4.0),
@@ -159,7 +150,6 @@ class _GameScreenState extends State<GameScreen> {
             }).toList(),
           );
         }),
-        // Add 4px space above the row containing Delete and Enter buttons
         const SizedBox(height: 4.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -175,11 +165,11 @@ class _GameScreenState extends State<GameScreen> {
               ),
               child: const Text('Backspace'),
             ),
-            const SizedBox(width: 4.0), // Space between Delete and Enter buttons
+            const SizedBox(width: 4.0),
             ElevatedButton(
               onPressed: handleEnter,
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(buttonWidth * 2, buttonWidth), // Enter button should be wider
+                minimumSize: Size(buttonWidth * 2, buttonWidth),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4.0),
