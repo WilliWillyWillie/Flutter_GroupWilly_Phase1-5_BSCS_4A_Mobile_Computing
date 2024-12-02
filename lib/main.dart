@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/play_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Wurdil',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
         useMaterial3: true,
@@ -48,7 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
             DifficultyButton(
               label: 'Easy',
               onPressed: () {
-              print('Play button pressed');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GameScreen(difficulty: 'Easy', wordLength: 5),
+                  ),
+                );
               },
               color: Colors.lightGreen,
             ),
@@ -56,7 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
             DifficultyButton(
               label: 'Medium',
               onPressed: () {
-                print('Play button pressed');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GameScreen(difficulty: 'Medium', wordLength: 6),
+                  ),
+                );
               },
               color: Colors.yellow
             ),
@@ -64,7 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
             DifficultyButton(
               label: 'Hard',
               onPressed: () {
-                print('Play button pressed');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GameScreen(difficulty: 'Hard', wordLength: 7),
+                  ),
+                );
               },
               color: Colors.redAccent
             ),
