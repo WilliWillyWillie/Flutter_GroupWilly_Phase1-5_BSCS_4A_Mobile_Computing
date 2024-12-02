@@ -131,6 +131,54 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
+  Widget buildKeyboard() {
+    const rows = [
+      'QWERTYUIOP',
+      'ASDFGHJKL',
+      'ZXCVBNM'
+    ];
+
+    return Column(
+      children: rows.map((row) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: row.split('').map((char) {
+            return Container(
+              margin: const EdgeInsets.all(4.0),
+              child: ElevatedButton(
+                onPressed: () => handleLetterInput(char),
+                child: Text(char),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(45, 45),
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      }).toList()
+        ..add(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: handleDelete,
+                child: const Icon(Icons.backspace),
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(45, 45)),
+              ),
+              const SizedBox(width: 8.0),
+              ElevatedButton(
+                onPressed: handleEnter,
+                child: const Text('Enter'),
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(90, 45)),
+              ),
+            ],
+          ),
+        ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeSurfaceColor = Theme.of(context).colorScheme.surface;
@@ -155,6 +203,7 @@ class _GameScreenState extends State<GameScreen> {
                 crossAxisCount: widget.wordLength,
                 crossAxisSpacing: 4.0,
                 mainAxisSpacing: 4.0,
+                childAspectRatio: 1.0, // Ensures square cells
               ),
               itemBuilder: (context, index) {
                 int row = index ~/ widget.wordLength;
@@ -168,56 +217,16 @@ class _GameScreenState extends State<GameScreen> {
                   ),
                   child: Text(
                     guesses[row].length > col ? guesses[row][col].toUpperCase() : '',
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                  ),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                 );
               },
             ),
           ),
-          // Keyboard
-          Wrap(
-            spacing: 4,
-            runSpacing: 4,
-            children: 'abcdefghijklmnopqrstuvwxyz'.split('').map((letter) {
-              return ElevatedButton(
-                onPressed: () => handleLetterInput(letter),
-                child: Text(letter.toUpperCase()),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(40, 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-          // Action Buttons (Delete & Enter)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: handleDelete,
-                child: const Text('Delete'),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(80, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 20),
-              ElevatedButton(
-                onPressed: handleEnter,
-                child: const Text('Enter'),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(80, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          buildKeyboard(),
+          const SizedBox(
+            height: 12,
+          )// Keyboard
         ],
       ),
     );
