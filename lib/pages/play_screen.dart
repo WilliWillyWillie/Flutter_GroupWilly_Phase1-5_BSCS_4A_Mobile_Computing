@@ -61,7 +61,6 @@ class _GameScreenState extends State<GameScreen> {
 
   void handleEnter() {
     final currentGuess = guesses[currentRow].join().toLowerCase();
-    print(currentCol ==  widget.wordLength);
     if (currentCol == widget.wordLength) {
       // Evaluate the current guess and provide feedback
       setState(() {
@@ -113,24 +112,6 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  void _showErrorDialog(String title, String content) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget buildKeyboard() {
     const rows = [
       'QWERTYUIOP',
@@ -138,44 +119,65 @@ class _GameScreenState extends State<GameScreen> {
       'ZXCVBNM'
     ];
 
+    double screenWidth = MediaQuery.of(context).size.width; // Get screen width
+    double buttonWidth = screenWidth / 10;
+    buttonWidth = buttonWidth > 50 ? 50 : buttonWidth;
+
     return Column(
-      children: rows.map((row) {
-        return Row(
+      children: [
+        // Map the rows of letters to Rows of buttons
+        ...rows.map((row) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: row.split('').map((char) {
+              return Container(
+                margin: const EdgeInsets.all(2.0),
+                child: ElevatedButton(
+                  onPressed: () => handleLetterInput(char),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(buttonWidth, buttonWidth), // Set size to responsive width
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  child: Text(char),
+                ),
+              );
+            }).toList(),
+          );
+        }),
+        // Add 4px space above the row containing Delete and Enter buttons
+        const SizedBox(height: 4.0),
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: row.split('').map((char) {
-            return Container(
-              margin: const EdgeInsets.all(4.0),
-              child: ElevatedButton(
-                onPressed: () => handleLetterInput(char),
-                child: Text(char),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(45, 45),
+          children: [
+            ElevatedButton(
+              onPressed: handleDelete,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonWidth),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0),
                 ),
               ),
-            );
-          }).toList(),
-        );
-      }).toList()
-        ..add(
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: handleDelete,
-                child: const Icon(Icons.backspace),
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(45, 45)),
+              child: const Text('Backspace'),
+            ),
+            const SizedBox(width: 4.0), // Space between Delete and Enter buttons
+            ElevatedButton(
+              onPressed: handleEnter,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth * 2, buttonWidth), // Enter button should be wider
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
               ),
-              const SizedBox(width: 8.0),
-              ElevatedButton(
-                onPressed: handleEnter,
-                child: const Text('Enter'),
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(90, 45)),
-              ),
-            ],
-          ),
+              child: const Text('Enter'),
+            ),
+          ],
         ),
+      ],
     );
   }
 
@@ -193,40 +195,48 @@ class _GameScreenState extends State<GameScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Game Grid
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: 6 * widget.wordLength,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: widget.wordLength,
-                crossAxisSpacing: 4.0,
-                mainAxisSpacing: 4.0,
-                childAspectRatio: 1.0, // Ensures square cells
-              ),
-              itemBuilder: (context, index) {
-                int row = index ~/ widget.wordLength;
-                int col = index % widget.wordLength;
+          // Game Grid with responsive sizing
+          Flexible(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                double gridSize = widget.wordLength * 55 + 5 * (widget.wordLength - 1);
 
-                return Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: gridColors[row].length > col ? gridColors[row][col] : Colors.grey[300],
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    guesses[row].length > col ? guesses[row][col].toUpperCase() : '',
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                return SizedBox(
+                  width: gridSize,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: 6 * widget.wordLength,
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: widget.wordLength,
+                      crossAxisSpacing: 5.0,
+                      mainAxisSpacing: 5.0,
                     ),
+                    itemBuilder: (context, index) {
+                      int row = index ~/ widget.wordLength;
+                      int col = index % widget.wordLength;
+
+                      return Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: gridColors[row].length > col ? gridColors[row][col] : Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Text(
+                          guesses[row].length > col ? guesses[row][col].toUpperCase() : '',
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             ),
           ),
           buildKeyboard(),
-          const SizedBox(
-            height: 12,
-          )// Keyboard
+          const SizedBox(height: 12),
         ],
       ),
     );
