@@ -7,7 +7,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -79,13 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
 class DifficultyButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
-  final Color? color; // Optional color parameter
+  final Color? color;
 
   const DifficultyButton({
     super.key,
     required this.label,
     required this.onPressed,
-    this.color, // Accepting color as an optional parameter
+    this.color,
   });
 
   @override
@@ -93,16 +92,16 @@ class DifficultyButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: color ?? Colors.lightGreen, // Use the provided color or default to light green
-        foregroundColor: Colors.white, // Text color
+        backgroundColor: color ?? Colors.lightGreen,
+        foregroundColor: Colors.white,
         textStyle: const TextStyle(
-          fontSize: 28, // Font size
+          fontSize: 28,
           fontWeight: FontWeight.bold,
         ),
-        padding: const EdgeInsets.symmetric(vertical: 16.0), // Adjust padding
-        minimumSize: const Size(200, 60), // Ensures uniform size
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        minimumSize: const Size(200, 60),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0), // Rounded edges with a boxy feel
+          borderRadius: BorderRadius.circular(12.0),
         ),
       ),
       child: Text(label),
