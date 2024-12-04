@@ -116,72 +116,97 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  Widget buildKeyboard() {
-    const rows = [
-      'QWERTYUIOP',
-      'ASDFGHJKL',
-      'ZXCVBNM'
-    ];
+ Widget buildKeyboard() {
+  const rows = [
+    'QWERTYUIOP',
+    'ASDFGHJKL',
+    'ZXCVBNM'
+  ];
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double buttonWidth = screenWidth / 10;
-    buttonWidth = buttonWidth > 50 ? 50 : buttonWidth;
+  // Get screen dimensions
+  double screenWidth = MediaQuery.of(context).size.width;
 
-    return Column(
-      children: [
-        ...rows.map((row) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: row.split('').map((char) {
-              return Container(
-                margin: const EdgeInsets.all(1.0),
+  double buttonWidth = (screenWidth - 20) / 10;
+  buttonWidth = buttonWidth.clamp(30, 50);
+
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      ...rows.map((row) {
+        return Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 2.0,
+          children: row.split('').map((char) {
+            return Column(
+              children: [ 
+              SizedBox(
+                width: buttonWidth,
+                height: buttonWidth,
                 child: ElevatedButton(
                   onPressed: () => handleLetterInput(char),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(buttonWidth, buttonWidth),
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2.0),
+                      borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
-                  child: Text(char, style: TextStyle(fontSize: buttonWidth * .5),),
+                  child: Text(
+                    char,
+                    style: TextStyle(fontSize: buttonWidth * 0.7),
+                  ),
                 ),
-              );
-            }).toList(),
-          );
-        }),
-        const SizedBox(height: 1.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
+              ),
+              const SizedBox(height: 2.0)
+            ]);
+          }).toList(),
+        );
+      }),
+      Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 2.0,
+        children: [
+          SizedBox(
+            height: buttonWidth,
+            child: ElevatedButton(
               onPressed: handleDelete,
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(buttonWidth, buttonWidth),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2.0),
+                  borderRadius: BorderRadius.circular(4.0),
                 ),
               ),
-              child: const Text('Backspace'),
+              child: Text(
+                'Backspace', 
+                style: TextStyle(
+                  fontSize: buttonWidth * 0.5
+                ),
+              ),
             ),
-            const SizedBox(width: 2.0),
-            ElevatedButton(
+          ),
+          SizedBox(
+            height: buttonWidth,
+            child: ElevatedButton(
               onPressed: handleEnter,
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(buttonWidth * 2, buttonWidth),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding:const EdgeInsets.symmetric(horizontal: 10),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2.0),
+                  borderRadius: BorderRadius.circular(4.0),
                 ),
               ),
-              child: const Text('Enter'),
+              child: Text(
+                'Enter',
+                style: TextStyle(
+                  fontSize: buttonWidth * 0.5
+                ),
+              ),
             ),
-          ],
-        ),
-      ],
-    );
-  }
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
