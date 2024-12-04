@@ -134,23 +134,23 @@ class _GameScreenState extends State<GameScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: row.split('').map((char) {
               return Container(
-                margin: const EdgeInsets.all(2.0),
+                margin: const EdgeInsets.all(1.0),
                 child: ElevatedButton(
                   onPressed: () => handleLetterInput(char),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(buttonWidth, buttonWidth),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
-                  child: Text(char),
+                  child: Text(char, style: TextStyle(fontSize: buttonWidth * .5),),
                 ),
               );
             }).toList(),
           );
         }),
-        const SizedBox(height: 4.0),
+        const SizedBox(height: 2.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -165,7 +165,7 @@ class _GameScreenState extends State<GameScreen> {
               ),
               child: const Text('Backspace'),
             ),
-            const SizedBox(width: 4.0),
+            const SizedBox(width: 2.0),
             ElevatedButton(
               onPressed: handleEnter,
               style: ElevatedButton.styleFrom(
