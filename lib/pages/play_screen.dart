@@ -139,9 +139,9 @@ class _GameScreenState extends State<GameScreen> {
                   onPressed: () => handleLetterInput(char),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(buttonWidth, buttonWidth),
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
+                      borderRadius: BorderRadius.circular(2.0),
                     ),
                   ),
                   child: Text(char, style: TextStyle(fontSize: buttonWidth * .5),),
@@ -150,7 +150,7 @@ class _GameScreenState extends State<GameScreen> {
             }).toList(),
           );
         }),
-        const SizedBox(height: 2.0),
+        const SizedBox(height: 1.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -160,7 +160,7 @@ class _GameScreenState extends State<GameScreen> {
                 minimumSize: Size(buttonWidth, buttonWidth),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0),
+                  borderRadius: BorderRadius.circular(2.0),
                 ),
               ),
               child: const Text('Backspace'),
@@ -172,7 +172,7 @@ class _GameScreenState extends State<GameScreen> {
                 minimumSize: Size(buttonWidth * 2, buttonWidth),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0),
+                  borderRadius: BorderRadius.circular(2.0),
                 ),
               ),
               child: const Text('Enter'),
