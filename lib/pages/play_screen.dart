@@ -129,81 +129,83 @@ class _GameScreenState extends State<GameScreen> {
   double buttonWidth = (screenWidth - 20) / 10;
   buttonWidth = buttonWidth.clamp(30, 50);
 
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      ...rows.map((row) {
-        return Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 2.0,
-          children: row.split('').map((char) {
-            return Column(
-              children: [ 
-              SizedBox(
-                width: buttonWidth,
-                height: buttonWidth,
-                child: ElevatedButton(
-                  onPressed: () => handleLetterInput(char),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ...rows.map((row) {
+          return Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 2.0,
+            children: row.split('').map((char) {
+              return Column(
+                children: [ 
+                SizedBox(
+                  width: buttonWidth,
+                  height: buttonWidth,
+                  child: ElevatedButton(
+                    onPressed: () => handleLetterInput(char),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                    ),
+                    child: Text(
+                      char,
+                      style: TextStyle(fontSize: buttonWidth * 0.7),
                     ),
                   ),
-                  child: Text(
-                    char,
-                    style: TextStyle(fontSize: buttonWidth * 0.7),
+                ),
+                const SizedBox(height: 2.0)
+              ]);
+            }).toList(),
+          );
+        }),
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 2.0,
+          children: [
+            SizedBox(
+              height: buttonWidth,
+              child: ElevatedButton(
+                onPressed: handleDelete,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                ),
+                child: Text(
+                  'Backspace', 
+                  style: TextStyle(
+                    fontSize: buttonWidth * 0.5
                   ),
                 ),
               ),
-              const SizedBox(height: 2.0)
-            ]);
-          }).toList(),
-        );
-      }),
-      Wrap(
-        alignment: WrapAlignment.center,
-        spacing: 2.0,
-        children: [
-          SizedBox(
-            height: buttonWidth,
-            child: ElevatedButton(
-              onPressed: handleDelete,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0),
+            ),
+            SizedBox(
+              height: buttonWidth,
+              child: ElevatedButton(
+                onPressed: handleEnter,
+                style: ElevatedButton.styleFrom(
+                  padding:const EdgeInsets.symmetric(horizontal: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
                 ),
-              ),
-              child: Text(
-                'Backspace', 
-                style: TextStyle(
-                  fontSize: buttonWidth * 0.5
+                child: Text(
+                  'Enter',
+                  style: TextStyle(
+                    fontSize: buttonWidth * 0.5
+                  ),
                 ),
               ),
             ),
-          ),
-          SizedBox(
-            height: buttonWidth,
-            child: ElevatedButton(
-              onPressed: handleEnter,
-              style: ElevatedButton.styleFrom(
-                padding:const EdgeInsets.symmetric(horizontal: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-              ),
-              child: Text(
-                'Enter',
-                style: TextStyle(
-                  fontSize: buttonWidth * 0.5
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ],
+          ],
+        ),
+      ],
+    )
   );
 }
 
@@ -224,7 +226,6 @@ class _GameScreenState extends State<GameScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Game Grid with responsive sizing
           Flexible(
             child: LayoutBuilder(
               builder: (context, constraints) {
