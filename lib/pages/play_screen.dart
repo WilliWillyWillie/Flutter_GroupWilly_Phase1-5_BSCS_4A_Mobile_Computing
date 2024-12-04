@@ -126,7 +126,7 @@ class _GameScreenState extends State<GameScreen> {
   // Get screen dimensions
   double screenWidth = MediaQuery.of(context).size.width;
 
-  double buttonWidth = (screenWidth - 20) / 10;
+  double buttonWidth = (screenWidth - 28) / 10;
   buttonWidth = buttonWidth.clamp(30, 50);
 
   return Center(
